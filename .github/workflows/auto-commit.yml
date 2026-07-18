@@ -1,1 +1,33 @@
+name: Auto Commit
 
+on:
+  workflow_dispatch
+
+permissions:
+  contents: write
+
+jobs:
+  auto-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Create test file
+        run: |
+          echo "Hello from GitHub Actions" > test.txt
+
+      - name: Commit changes
+        run: |
+          git add .
+          git diff --cached --quiet || git commit -m "Auto Commit"
+
+      - name: Push changes
+        run: |
+          git push
